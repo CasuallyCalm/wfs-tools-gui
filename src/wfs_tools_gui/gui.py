@@ -1,33 +1,28 @@
 import dearpygui.dearpygui as dpg
 
-
-def save_callback():
-    print("Save Clicked")
-
-dpg.create_context()
-dpg.create_viewport(title="WFS Tools",width=600, height=400)
-dpg.setup_dearpygui()
-
-with dpg.window(label="main_windows", tag='window'):
-    with dpg.menu_bar():
-        with dpg.menu(label="Tools"):
-            dpg.add_menu_item(label="Set Tools Path..", tag='tools_dir')
-            with dpg.tooltip("tools_dir"):
-                dpg.add_text("The directory containing the wfs tools executables")
-            dpg.add_menu_item(label="wfs-extract")
-            dpg.add_menu_item(label="wfs-file-injector")
-            dpg.add_menu_item(label="wfs-fuse")
-            dpg.add_menu_item(label="wfs-info")
-            dpg.add_menu_item(label="wfs-reencryptor")
-        
-    dpg.add_text("Hello world")
-    dpg.add_button(label="Save", callback=save_callback)
-    dpg.add_input_text(label="string")
-    dpg.add_slider_float(label="float")
+from .main_tab import Main
+from .style import register_font
+from .tool_tabs import WFSExtract, WFSFileInjector, WFSFuse, WFSInfo, WFSReencryptor
 
 
+def run():
+    dpg.create_context()
+    dpg.create_viewport(title="WFS Tools",width=800, height=600)
+    dpg.setup_dearpygui()
+    register_font()
 
-dpg.show_viewport()
-dpg.set_primary_window('window', True)
-dpg.start_dearpygui()
-dpg.destroy_context()
+    with dpg.window(label="main_windows", tag='window'):
+        with dpg.tab_bar(tag="tab_bar"):
+            Main()
+            WFSExtract()
+            WFSFileInjector()
+            WFSFuse()
+            WFSInfo()
+            WFSReencryptor()
+    dpg.show_viewport()
+    dpg.set_primary_window('window', True)
+    dpg.start_dearpygui()
+    dpg.destroy_context()
+
+if __name__ == "__main__":
+    run()
