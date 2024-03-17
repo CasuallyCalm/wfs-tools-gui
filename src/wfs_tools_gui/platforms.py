@@ -11,7 +11,9 @@ class Drive:
     def __init__(self, label:str, path:str) -> None:
         self.label = label
         self.path = path
-
+    
+    def __eq__(self, __value: object) -> bool:
+        return __value == self.label
 class PlatformBase(ABC):
 
     name:str

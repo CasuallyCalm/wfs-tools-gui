@@ -11,7 +11,7 @@ class Main:
     def __init__(self) -> None:
 
         def load_tool_path(sender, app_data, user_data):
-            [dpg.hide_item(tab) for tab in dpg.get_item_children('tab_bar',1)[1:]]
+            [dpg.hide_item(tab) for tab in dpg.get_item_children('tool_tab_bar',1)]
             path = app_data['file_path_name']
             dpg.set_value('tools_path', path)
             for item in Path(path).iterdir():
@@ -31,14 +31,15 @@ class Main:
         
 
 
-        with dpg.tab(label='Main', tag='main_tab'):
-            with dpg.group( horizontal=True):
+        with dpg.group():
+            with dpg.group(horizontal=True):
                 dpg.add_button(label='Select wfs-tools directory', callback=lambda: dpg.show_item(select_tools))
-                dpg.add_text(tag='tools_path')
+                dpg.add_input_text(tag='tools_path', readonly=True)
             with dpg.group( horizontal=True):
                 dpg.add_button(label='Select otp file (otp.bin)', callback=lambda: dpg.show_item(select_otp))
-                dpg.add_text(tag='otp_path')
+                dpg.add_input_text(tag='otp_path', readonly=True)
             with dpg.group( horizontal=True):
                 dpg.add_button(label='Select seeprom file (seeprom.bin)', callback=lambda: dpg.show_item(select_seeprom))
-                dpg.add_text(tag='seeprom_path')
+                dpg.add_input_text(tag='seeprom_path', readonly=True)
+        dpg.add_spacer(height=10)
 

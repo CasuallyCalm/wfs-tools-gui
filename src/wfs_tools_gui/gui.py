@@ -12,8 +12,8 @@ def run():
     register_font()
 
     with dpg.window(label="main_windows", tag='window'):
-        with dpg.tab_bar(tag="tab_bar"):
-            Main()
+        Main()
+        with dpg.tab_bar(tag='tool_tab_bar'):
             WFSExtract()
             WFSFileInjector()
             WFSFuse()
