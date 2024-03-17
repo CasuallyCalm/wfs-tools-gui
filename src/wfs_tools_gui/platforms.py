@@ -45,3 +45,5 @@ def get_platform()->PlatformBase:
     platforms = dict(win32=Windows(), linux = Linux())
     return platforms[sys.platform]
 
+
+PLATFORM = get_platform()
