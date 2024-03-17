@@ -26,7 +26,7 @@ class Main:
         select_tools = dpg.add_file_dialog(label='Tools Directory',directory_selector=True, modal=True, width=dpg.get_viewport_width()-100,height=dpg.get_viewport_height()-100, callback= load_tool_path, show=False)
         select_otp = dpg.add_file_dialog(label='otp.bin', directory_selector=False, modal=True,width=dpg.get_viewport_width()-100, height=dpg.get_viewport_height()-100, callback=lambda _, app_data: dpg.set_value('otp_path', app_data['file_path_name']), show=False)
         select_seeprom = dpg.add_file_dialog(label='seeprom.bin',directory_selector=False, modal=True, width=dpg.get_viewport_width()-100, height=dpg.get_viewport_height()-100, callback=lambda _, app_data: dpg.set_value('seeprom_path', app_data['file_path_name']), show=False)
-        dpg.add_file_extension("*otp.bin", color=(150, 255, 150, 255), parent=select_otp, custom_text='[.bin]')
+        dpg.add_file_extension(".bin", color=(150, 255, 150, 255), parent=select_otp, custom_text='[.bin]')
         dpg.add_file_extension(".bin", color=(150, 255, 150, 255), parent=select_seeprom, custom_text='[.bin]')
         
 
