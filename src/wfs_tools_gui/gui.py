@@ -3,10 +3,17 @@ import sys
 
 import dearpygui.dearpygui as dpg
 
-from .arguments import Arguments
+from . import arguments
 from .platforms import PLATFORM
 from .style import register_font
-from .tool_tabs import WFSExtract, WFSFileInjector, WFSFuse, WFSInfo, WFSReencryptor
+from .tool_tabs import (
+    WFSExtract,
+    WFSFileInjector,
+    WFSFuse,
+    WFSInfo,
+    WFSReencryptor,
+)
+from .tools_dir import tools_dir
 
 
 def is_admin():
@@ -23,7 +30,12 @@ def run():
         else:
             ctypes.windll.shell32.ShellExecuteW(
                 # run with pythonw.exe to remove the cmd window displaying while the gui is running, this is silly
-                None, "runas", sys.executable[:-4]+"w.exe", " ".join(sys.argv), None, 1
+                None,
+                "runas",
+                sys.executable[:-4] + "w.exe",
+                " ".join(sys.argv),
+                None,
+                1,
             )
 
     elif PLATFORM.name == "linux":
@@ -37,7 +49,10 @@ def gui():
     register_font()
 
     with dpg.window(tag="window"):
-        Arguments()
+        arguments.argument_registry()
+        tools_dir()
+        arguments.seeprom()
+        arguments.otp()
         with dpg.tab_bar(tag="tool_tab_bar"):
             WFSExtract()
             WFSFileInjector()
