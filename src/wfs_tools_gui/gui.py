@@ -15,15 +15,20 @@ def is_admin():
     except:
         return False
 
+
 def run():
-    if PLATFORM.name == 'win':
+    if PLATFORM.name == "win":
         if is_admin():
             gui()
         else:
-            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+            ctypes.windll.shell32.ShellExecuteW(
+                # run with pythonw.exe to remove the cmd window displaying while the gui is running, this is silly
+                None, "runas", sys.executable[:-4]+"w.exe", " ".join(sys.argv), None, 1
+            )
 
-    elif PLATFORM.name == 'linux':
+    elif PLATFORM.name == "linux":
         gui()
+
 
 def gui():
     dpg.create_context()
@@ -31,7 +36,7 @@ def gui():
     dpg.setup_dearpygui()
     register_font()
 
-    with dpg.window( tag="window"):
+    with dpg.window(tag="window"):
         Arguments()
         with dpg.tab_bar(tag="tool_tab_bar"):
             WFSExtract()
@@ -44,7 +49,6 @@ def gui():
     dpg.set_primary_window("window", True)
     dpg.start_dearpygui()
     dpg.destroy_context()
-
 
 
 if __name__ == "__main__":
