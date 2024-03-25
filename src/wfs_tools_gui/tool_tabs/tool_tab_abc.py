@@ -2,6 +2,8 @@ from abc import ABC
 
 import dearpygui.dearpygui as dpg
 
+from .. import arguments
+
 
 class ToolTabs(ABC):
     name: str
@@ -9,7 +11,7 @@ class ToolTabs(ABC):
     def __init__(self) -> None:
         self.tab = dpg.add_tab(label=self.name, tag=self.tag, show=False)
         with dpg.value_registry():
-            self.path_value = dpg.add_string_value(
+            self.executable_path = dpg.add_string_value(
                 tag=f"{self.name}_path"
             )
 
@@ -20,12 +22,9 @@ class ToolTabs(ABC):
     def tag(self):
         return self.name + "_tab"
 
-    @property
     def command(self) -> str:
-        _path = dpg.get_value(self.path_value)
-        _seeprom = dpg.get_value("seeprom_path")
-        _otp = dpg.get_value("otp_path")
-        return f"{_path} --otp {_otp} --seeprom {_seeprom}"
+        exec = dpg.get_value(self.executable_path)
+        return f"{exec} --otp {arguments.get_otp()} --seeprom {arguments.get_seeprom()}"
 
     def execute(self) -> None:
-        print(self.command)
+        print(self.command())

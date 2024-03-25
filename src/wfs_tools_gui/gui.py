@@ -4,6 +4,7 @@ import sys
 import dearpygui.dearpygui as dpg
 
 from . import arguments
+from .file_dialogs import load_file_dialogs
 from .platforms import PLATFORM
 from .style import register_font
 from .tool_tabs import (
@@ -46,13 +47,17 @@ def gui():
     dpg.create_context()
     dpg.create_viewport(title="WFS Tools", width=800, height=600)
     dpg.setup_dearpygui()
+
+    # setup stuff
     register_font()
+    load_file_dialogs()
+    arguments.argument_registry()
 
     with dpg.window(tag="window"):
-        arguments.argument_registry()
         tools_dir()
         arguments.seeprom()
         arguments.otp()
+        dpg.add_spacer(height=10)
         with dpg.tab_bar(tag="tool_tab_bar"):
             WFSExtract()
             WFSFileInjector()

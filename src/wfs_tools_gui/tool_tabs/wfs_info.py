@@ -13,10 +13,13 @@ class WFSInfo(ToolTabs):
         arguments.input_type(self.tab)
         self.run_button()
 
+    def command(self) -> str:
+        cmd = super().command()
+        return  f"{cmd} --input {arguments.get_input()} --type {arguments.get_type()}"
 
     def execute(self) -> None:
         process = subprocess.Popen(
-            self.command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            self.command(), stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         stdout, stderr = process.communicate()
         window_name = f"{self.name}_modal"
