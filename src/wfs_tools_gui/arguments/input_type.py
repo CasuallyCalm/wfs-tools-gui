@@ -2,7 +2,7 @@ import dearpygui.dearpygui as dpg
 
 from ..platforms import PLATFORM
 
-INPUT_GROUPS = dict(usb=[], mlc=[], plain=[])
+INPUTS = dict(usb=[], mlc=[], plain=[])
 RADIOS = []
 
 
@@ -11,8 +11,8 @@ def input_type(parent: int | str):
 
     def refresh_drives():
         dpg.set_value(usb_combo, "")
-        __drives = PLATFORM.get_drives()
-        dpg.configure_item(usb_combo, items=[drive.label for drive in __drives])
+        drives = PLATFORM.get_drives()
+        dpg.configure_item(usb_combo, items=[drive.label for drive in drives])
 
     def set_input(_, app_data, __):
         for drive in drives:
@@ -22,7 +22,7 @@ def input_type(parent: int | str):
     def change_input_type(_, input_type: str):
         for radio in RADIOS:
             dpg.set_value(radio, input_type)
-        for _type, item_group in INPUT_GROUPS.items():
+        for _type, item_group in INPUTS.items():
             for item in item_group:
                 if _type != input_type.lower():
                     dpg.hide_item(item)
@@ -66,7 +66,7 @@ def input_type(parent: int | str):
                 dpg.add_input_text(source="--input plain")
 
             # Used to sync input state across tabs
-            INPUT_GROUPS["usb"].append(usb)
-            INPUT_GROUPS["mlc"].append(mlc)
-            INPUT_GROUPS["plain"].append(plain)
+            INPUTS["usb"].append(usb)
+            INPUTS["mlc"].append(mlc)
+            INPUTS["plain"].append(plain)
             RADIOS.append(radio)

@@ -17,7 +17,10 @@ def load_tool_path(_, app_data):
             dpg.set_value(name + "_path", item)
     dpg.configure_item("otp_dialog", default_path=path)
     dpg.configure_item("seeprom_dialog", default_path=path)
+    dpg.configure_item("plain_dialog", default_path=path)
+    dpg.configure_item("mlc_dialog", default_path=path)
     dpg.configure_item("output_dialog", default_path=path)
+    dpg.configure_item("inject-file_dialog", default_path=path)
 
 
 def load_file_dialogs():
@@ -103,3 +106,21 @@ def load_file_dialogs():
         tag="output_dialog",
         show=False,
     )
+
+    with dpg.file_dialog(
+        label="Inject File",
+        directory_selector=False,
+        modal=True,
+        width=dpg.get_viewport_width() - 100,
+        height=dpg.get_viewport_height() - 100,
+        callback=lambda _, app_data: dpg.set_value(
+            "--inject-file", app_data["file_path_name"]
+        ),
+        tag="inject-file_dialog",
+        show=False,
+    ):
+        dpg.add_file_extension(
+            ".zip",
+            color=(150, 255, 150, 255),
+            custom_text="[zip]",
+        )
