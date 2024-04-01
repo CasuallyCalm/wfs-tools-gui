@@ -1,4 +1,13 @@
-__all__ = ("seeprom", "otp", "argument_registry", "input_type", "output", "dump_path", "inject_file", "inject_path")
+__all__ = (
+    "seeprom",
+    "otp",
+    "argument_registry",
+    "input_type",
+    "output",
+    "dump_path",
+    "inject_file",
+    "inject_path",
+)
 
 import dearpygui.dearpygui as dpg
 
@@ -24,9 +33,13 @@ def get_type():
     return dpg.get_value("--type").lower()
 
 
-def get_input(input_type:str|None=None):
+def get_input(input_type: str | None = None):
     _type = input_type or get_type()
     return dpg.get_value("--input " + _type)
+
+
+def get_dump_path():
+    return dpg.get_value("--dump-path")
 
 
 def get_outupt():
@@ -35,6 +48,7 @@ def get_outupt():
 
 def get_inject_file():
     return dpg.get_value("--inject-file")
+
 
 def get_inject_path():
     return dpg.get_value("--inject-path")
