@@ -2,17 +2,13 @@ import sys
 
 from PySide6.QtWidgets import (
     QApplication,
-    QFileDialog,
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
     QMainWindow,
-    QPushButton,
     QVBoxLayout,
     QWidget,
 )
 
-from .arguments.input_arg import InputType
+from .widgets.input_field import Input
+from .widgets.input_type import InputType
 
 
 class MainWindow(QMainWindow):
@@ -24,28 +20,25 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout()
         main_widget.setLayout(layout)
         self.setCentralWidget(main_widget)
+        
+        self.tools_dir = Input("WFS Tools Dir:", "WFS Tools Directory", file_dialog=False)
+        self.otp = Input("OTP:", "Slect OTP File", filter="otp (otp.bin);;bin (*.bin);;All (*)")
+        self.seeprom = Input("Seeprom:", "Slect Seeprom File", filter="seeprom (seeprom.bin);;bin (*.bin);;All (*)")
+        self.inject_file = Input("Inject File", "Slect File to Inject", filter = "zip (*.zip);;All (*)")
+        # self.mlc = Input("", "Select MLC Image", filter="image (*.img);;All (*)", hide=True)
+        # self.plain = Input("", "Select Mount Path", file_dialog=False, hide=True) 
 
-        layout.addWidget(QLabel("WFS Tools Dir:"))
-        tools_dir_layout = QHBoxLayout()
-        self.tools_dir = QLineEdit()
-        self.tools_dir.textChanged.connect(self.tools_dir_changed)
-        tools_dir_layout.addWidget(self.tools_dir)
-        dir_button = QPushButton(text="Browse")
-        dir_button.clicked.connect(self.set_tools_dir)
-        tools_dir_layout.addWidget(dir_button)
-        layout.addLayout(tools_dir_layout)
 
+        layout.addWidget(self.tools_dir)
         layout.addWidget(InputType())
+        # layout.addWidget(self.mlc)
+        # layout.addWidget(self.plain)
+        layout.addWidget(self.otp)
+        layout.addWidget(self.seeprom)
+        layout.addWidget(self.inject_file)
 
         layout.addStretch()
     
-    def set_tools_dir(self):
-        tools_dir = QFileDialog.getExistingDirectory(caption="WFT Tools Directory")
-        if tools_dir:
-            self.tools_dir.setText(tools_dir)
-
-    def tools_dir_changed(self, text:str):
-        print(text)
 
 def run():
     # sys.argv += ['-platform', 'windows:darkmode=2']
