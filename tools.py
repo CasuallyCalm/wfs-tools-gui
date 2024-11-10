@@ -1,28 +1,14 @@
+import ctypes
 import subprocess
 import sys
 from abc import ABC
-from typing import List
-
-TOOLS = ["wfs-extract", "wfs-file-injector", "wfs-fuse", "wfs-info", "wfs-reencryptor"]
-
-class Drive:
-    def __init__(self, label: str, path: str) -> None:
-        self.label = label
-        self.path = path
-
-    def __eq__(self, __value: object) -> bool:
-        return __value == self.label
 
 
 class PlatformBase(ABC):
     name: str
     extension: str
 
-    @property
-    def executables(self) -> List[str]:
-        return [tool + self.extension for tool in TOOLS]
-
-    def get_drives(self) -> List[Drive]:
+    def get_drives(self) -> dict[str,str]:
         pass
 
 
@@ -30,11 +16,11 @@ class Windows(PlatformBase):
     name = "win"
     extension = ".exe"
 
-    def get_drives(self) -> List[Drive]:
+    def get_drives(self) -> dict:
         proc = subprocess.run(
             "powershell Get-WmiObject Win32_DiskDrive", capture_output=True
         )
-        dicts = [
+        drives = [
             {
                 line.split(":")[0].strip(): line.split(":")[1].strip()
                 for line in drive.split("\n")
@@ -44,7 +30,7 @@ class Windows(PlatformBase):
             .replace("\r", "")
             .split("\n\n")
         ]
-        return [Drive(drive["Caption"], drive["DeviceID"]) for drive in dicts]
+        return {drive["Caption"]: drive["DeviceID"] for drive in drives}
 
 
 class Linux(PlatformBase):
@@ -58,3 +44,21 @@ def get_platform() -> PlatformBase:
 
 
 PLATFORM = get_platform()
+
+def run_as_admin():
+    if PLATFORM.name == "win":
+        if not ctypes.windll.shell32.IsUserAnAdmin():
+            ctypes.windll.shell32.ShellExecuteW(
+                # run with pythonw.exe to remove the cmd window displaying while the gui is running, this is silly
+                None,
+                "runas",
+                sys.executable[:-4] + "w.exe",
+                " ".join(sys.argv),
+                None,
+                1,
+            )
+
+
+
+
+

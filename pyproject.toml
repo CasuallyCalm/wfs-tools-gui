@@ -1,84 +1,9 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
 name = "wfs-tools-gui"
-dynamic = ["version"]
-description = ''
+version = "0.1.0"
+description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.8"
-license = "MIT"
-keywords = []
-authors = [
-  { name = "CasuallyCalm", email = "void@some.where" },
-]
-classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
-]
-dependencies = ["dearpygui"]
-
-[project.urls]
-Documentation = "https://github.com/unknown/wfs-tools-gui#readme"
-Issues = "https://github.com/unknown/wfs-tools-gui/issues"
-Source = "https://github.com/unknown/wfs-tools-gui"
-
-[tool.hatch.version]
-path = "src/wfs_tools_gui/__about__.py"
-
-[tool.hatch.envs.default]
+requires-python = ">=3.12"
 dependencies = [
-  "coverage[toml]>=6.5",
-  "pytest",
+    "gooey>=1.0.8.1",
 ]
-[tool.hatch.envs.default.scripts]
-test = "pytest {args:tests}"
-test-cov = "coverage run -m pytest {args:tests}"
-cov-report = [
-  "- coverage combine",
-  "coverage report",
-]
-cov = [
-  "test-cov",
-  "cov-report",
-]
-
-[[tool.hatch.envs.all.matrix]]
-python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
-
-[tool.hatch.envs.types]
-dependencies = [
-  "mypy>=1.0.0",
-]
-[tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/wfs_tools_gui tests}"
-
-[tool.coverage.run]
-source_pkgs = ["wfs_tools_gui", "tests"]
-branch = true
-parallel = true
-omit = [
-  "src/wfs_tools_gui/__about__.py",
-]
-
-[tool.coverage.paths]
-wfs_tools_gui = ["src/wfs_tools_gui", "*/wfs-tools-gui/src/wfs_tools_gui"]
-tests = ["tests", "*/wfs-tools-gui/tests"]
-
-[tool.coverage.report]
-exclude_lines = [
-  "no cov",
-  "if __name__ == .__main__.:",
-  "if TYPE_CHECKING:",
-]
-
-[tool.ruff]
-src = ["src"] 
