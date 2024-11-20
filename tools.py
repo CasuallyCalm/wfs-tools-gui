@@ -8,8 +8,8 @@ class PlatformBase(ABC):
     name: str
     extension: str
 
-    def get_drives(self) -> dict[str,str]:
-        pass
+    def get_drives(self) -> dict[str, str]:
+        return {}
 
 
 class Windows(PlatformBase):
@@ -45,20 +45,8 @@ def get_platform() -> PlatformBase:
 
 PLATFORM = get_platform()
 
-def run_as_admin():
+
+def is_admin():
     if PLATFORM.name == "win":
-        if not ctypes.windll.shell32.IsUserAnAdmin():
-            ctypes.windll.shell32.ShellExecuteW(
-                # run with pythonw.exe to remove the cmd window displaying while the gui is running, this is silly
-                None,
-                "runas",
-                sys.executable[:-4] + "w.exe",
-                " ".join(sys.argv),
-                None,
-                1,
-            )
-
-
-
-
-
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    return True
