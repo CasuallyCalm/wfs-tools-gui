@@ -5,13 +5,13 @@ from typing import List
 
 TOOLS = ["wfs-extract", "wfs-file-injector", "wfs-fuse", "wfs-info", "wfs-reencryptor"]
 
-class Drive:
-    def __init__(self, label: str, path: str) -> None:
-        self.label = label
-        self.path = path
+# class Drive:
+#     def __init__(self, label: str, path: str) -> None:
+#         self.label = label
+#         self.path = path
 
-    def __eq__(self, __value: object) -> bool:
-        return __value == self.label
+#     def __eq__(self, __value: object) -> bool:
+#         return __value == self.label
 
 
 class PlatformBase(ABC):
@@ -22,7 +22,7 @@ class PlatformBase(ABC):
     def executables(self) -> List[str]:
         return [tool + self.extension for tool in TOOLS]
 
-    def get_drives(self) -> List[Drive]:
+    def get_drives(self) -> dict[str, str]:
         pass
 
 
@@ -30,7 +30,7 @@ class Windows(PlatformBase):
     name = "win"
     extension = ".exe"
 
-    def get_drives(self) -> List[Drive]:
+    def get_drives(self) -> dict[str, str]:
         proc = subprocess.run(
             "powershell Get-WmiObject Win32_DiskDrive", capture_output=True
         )
@@ -44,7 +44,7 @@ class Windows(PlatformBase):
             .replace("\r", "")
             .split("\n\n")
         ]
-        return [Drive(drive["Caption"], drive["DeviceID"]) for drive in dicts]
+        return {drive["Caption"]: drive["DeviceID"] for drive in dicts}
 
 
 class Linux(PlatformBase):
