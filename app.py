@@ -7,14 +7,17 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QPlainTextEdit,
     QPushButton,
+    QSizePolicy,
     QTabWidget,
     QVBoxLayout,
     QWidget,
 )
 
 from platforms import PLATFORM
-from widgets.input_field import Input
+from widgets.input_field import InputField
+from widgets.wfs_extract import WFSExtract
 from widgets.wfs_info import WFSInfo
+from widgets.wfs_reencryptor import WFSReencryptor
 
 
 class MainWindow(QMainWindow):
@@ -27,15 +30,22 @@ class MainWindow(QMainWindow):
         main_widget.setLayout(layout)
         self.setCentralWidget(main_widget)
 
-        self.tools_dir = Input(
+        self.tools_dir = InputField(
             "WFS Tools Dir:", "WFS Tools Directory", file_dialog=False
         )
 
         self.tools_dir.line_edit.textChanged.connect(self.tools_dir_changed)
 
         self.tabs = QTabWidget()
+        self.tabs.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
+        )
         self.tabs.hide()
-        tabs_widgets = {"WFS-Info": WFSInfo(), "WFS-Stuff": WFSInfo()}
+        tabs_widgets = {
+            "WFS-Info": WFSInfo(),
+            "WFS-Extract": WFSExtract(),
+            "WFS-Reencryptor": WFSReencryptor(),
+        }
         self.tab_ids = {
             tab.lower(): self.tabs.addTab(widget, tab)
             for tab, widget in tabs_widgets.items()
@@ -76,7 +86,7 @@ class MainWindow(QMainWindow):
 
     def execute(self):
         tool = self.tabs.currentWidget()
-        bin = f'"{Path(self.tools_dir.getValue(), tool.name + PLATFORM.extension)}"'
+        bin = str(Path(self.tools_dir.getValue(), tool.name + PLATFORM.extension))
         self.process = QProcess()
         self.process.readyReadStandardError.connect(self.log_err)
         self.process.readyReadStandardOutput.connect(self.log_std)
@@ -87,11 +97,11 @@ class MainWindow(QMainWindow):
 
     def log_std(self):
         msg = self.process.readAllStandardOutput()
-        self.log(bytes(msg).decode("utf8"))
+        self.log(bytes(msg).decode())
 
     def log_err(self):
         msg = self.process.readAllStandardError()
-        self.log(bytes(msg).decode("utf8"))
+        self.log(bytes(msg).decode())
 
     def finished(self):
         self.log("----------------------------------------------------------")

@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
 )
 
 
-class Input(QWidget):
+class InputField(QWidget):
     def __init__(
         self,
         title: str,
