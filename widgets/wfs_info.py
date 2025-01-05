@@ -21,6 +21,7 @@ class WFSInfo(QWidget):
         layout.addWidget(self.otp)
         layout.addWidget(self.seeprom)
         layout.setStretchFactor(layout, 1)
+        layout.addStretch()
 
     @property
     def args(self):

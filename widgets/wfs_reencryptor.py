@@ -25,13 +25,14 @@ class WFSReencryptor(QWidget):
         layout.addWidget(self.input)
         layout.addWidget(self.otp)
         layout.addWidget(self.seeprom)
-        layout.addSpacerItem(QSpacerItem(5, 5))
+        layout.addSpacerItem(QSpacerItem(0, 10))
         layout.addWidget(QLabel("Output"))
         layout.addWidget(self.output)
         layout.addWidget(self.output_otp)
         layout.addWidget(self.output_seeprom)
 
         layout.setStretchFactor(layout, 1)
+        layout.addStretch()
 
     @property
     def args(self):
@@ -67,5 +68,4 @@ class WFSReencryptor(QWidget):
                     self.output.getInputType(),
                 ]
             )
-        print(_args)
         return _args

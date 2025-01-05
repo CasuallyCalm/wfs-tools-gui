@@ -29,6 +29,7 @@ class WFSExtract(QWidget):
         layout.addWidget(self.dump_path)
         layout.addWidget(self.verbose)
         layout.setStretchFactor(layout, 1)
+        layout.addStretch()
 
     @property
     def args(self):
