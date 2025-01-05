@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 from platforms import PLATFORM
 from widgets.input_field import InputField
 from widgets.wfs_extract import WFSExtract
+from widgets.wfs_file_injector import WFSFileInjector
 from widgets.wfs_info import WFSInfo
 from widgets.wfs_reencryptor import WFSReencryptor
 
@@ -45,6 +46,7 @@ class MainWindow(QMainWindow):
             "WFS-Info": WFSInfo(),
             "WFS-Extract": WFSExtract(),
             "WFS-Reencryptor": WFSReencryptor(),
+            "WFS-File-Injector": WFSFileInjector(),
         }
         self.tab_ids = {
             tab.lower(): self.tabs.addTab(widget, tab)
@@ -55,9 +57,14 @@ class MainWindow(QMainWindow):
         self.execute_button.hide()
         self.execute_button.clicked.connect(self.execute)
 
+        self.cancel_button = QPushButton(text="Cancel")
+        self.cancel_button.hide()
+        self.cancel_button.clicked.connect(self.cancel)
+
         layout.addWidget(self.tools_dir)
         layout.addWidget(self.tabs, stretch=0)
         layout.addWidget(self.execute_button)
+        layout.addWidget(self.cancel_button)
         layout.addSpacing(20)
 
         self.logger = QPlainTextEdit()
@@ -84,7 +91,15 @@ class MainWindow(QMainWindow):
     def log(self, msg: str):
         self.logger.appendPlainText(msg)
 
+    def cancel(self):
+        if self.process:
+            self.process.terminate()
+            self.log("Cancelling Process!")
+
     def execute(self):
+        self.execute_button.hide()
+        self.cancel_button.show()
+
         tool = self.tabs.currentWidget()
         bin = str(Path(self.tools_dir.getValue(), tool.name + PLATFORM.extension))
         self.process = QProcess()
@@ -97,15 +112,23 @@ class MainWindow(QMainWindow):
 
     def log_std(self):
         msg = self.process.readAllStandardOutput()
-        self.log(bytes(msg).decode())
+        try:
+            self.log(bytes(msg).decode())
+        except UnicodeDecodeError:
+            pass
 
     def log_err(self):
         msg = self.process.readAllStandardError()
-        self.log(bytes(msg).decode())
+        try:
+            self.log(bytes(msg).decode())
+        except UnicodeDecodeError:
+            pass
 
     def finished(self):
         self.log("----------------------------------------------------------")
         self.process = None
+        self.execute_button.show()
+        self.cancel_button.hide()
 
 
 def run():
