@@ -1,4 +1,16 @@
-.direnv/
-*__pycache__*
-*.pyc
-.vscode/
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+
+# Misc Folders
+.ruff_cache
+.vscode
+.venv
