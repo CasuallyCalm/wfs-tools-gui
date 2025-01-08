@@ -52,7 +52,6 @@ class MainWindow(QMainWindow):
             tab.lower(): self.tabs.addTab(widget, tab)
             for tab, widget in tabs_widgets.items()
         }
-
         self.execute_button = QPushButton(text="Execute")
         self.execute_button.hide()
         self.execute_button.clicked.connect(self.execute)

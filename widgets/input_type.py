@@ -52,7 +52,12 @@ class NoneType(QWidget):
 class InputType(QWidget):
     __input_type: str
 
-    def __init__(self, parent: QWidget | None = None, has_none: bool = False) -> None:
+    def __init__(
+        self,
+        parent: QWidget | None = None,
+        has_none: bool = False,
+        output: bool = False,
+    ) -> None:
         super().__init__(parent)
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -64,8 +69,17 @@ class InputType(QWidget):
             "Select MLC Image",
             filter="mlc (mlc.bin);;.bin (*.bin);;All (*)",
             hide=True,
+            file_dialog=not output,
+            save_file_dialog=output,
         )
-        self.plain = InputField("", "Select Mount Path", file_dialog=False, hide=True)
+        self.plain = InputField(
+            "",
+            "Select Plain Image",
+            filter=".bin (*.bin);;All (*)",
+            hide=True,
+            file_dialog=not output,
+            save_file_dialog=output,
+        )
         self.input_types = {
             "USB": USBInput(),
             "MLC": self.mlc,

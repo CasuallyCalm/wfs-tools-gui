@@ -17,6 +17,7 @@ class InputField(QWidget):
         caption: str,
         parent: QWidget | None = None,
         file_dialog=True,
+        save_file_dialog=False,
         filter: str = "",
         hide=False,
         show_button=True,
@@ -24,6 +25,7 @@ class InputField(QWidget):
         super().__init__(parent)
 
         self._file_dialog = file_dialog
+        self._save_file_dialog = save_file_dialog
         self._caption = caption
         self._filter = filter
 
@@ -49,6 +51,10 @@ class InputField(QWidget):
     def _set_input(self):
         if self._file_dialog:
             directory, _ = QFileDialog.getOpenFileName(
+                caption=self._caption, filter=self._filter
+            )
+        elif self._save_file_dialog:
+            directory, _ = QFileDialog.getSaveFileName(
                 caption=self._caption, filter=self._filter
             )
         else:
