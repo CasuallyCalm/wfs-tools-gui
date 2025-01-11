@@ -36,7 +36,10 @@ class WFSFileInjector(QWidget):
         if button.text() == "Plain":
             self.otp.hide()
             self.seeprom.hide()
-        elif self.otp.isHidden() or self.seeprom.isHidden():
+        elif button.text() == "MLC":
+            self.otp.show()
+            self.seeprom.hide()
+        elif button.text() == "USB":
             self.otp.show()
             self.seeprom.show()
 

@@ -44,7 +44,7 @@ class USBInput(QWidget):
         return self.drives[self.combo_box.currentText()]
 
 
-class NoneType(QWidget):
+class SameAsInput(QWidget):
     def getValue(self):
         return
 
@@ -67,7 +67,7 @@ class InputType(QWidget):
         self.mlc = InputField(
             "",
             "Select MLC Image",
-            filter="mlc (mlc.bin);;.bin (*.bin);;All (*)",
+            filter="mlc (mlc.*);;.bin (*.bin);;.img (*.img);;All (*)",
             hide=True,
             file_dialog=not output,
             save_file_dialog=output,
@@ -75,7 +75,7 @@ class InputType(QWidget):
         self.plain = InputField(
             "",
             "Select Plain Image",
-            filter=".bin (*.bin);;All (*)",
+            filter=".bin (*.bin);;.img (*.img);;All (*)",
             hide=True,
             file_dialog=not output,
             save_file_dialog=output,
@@ -86,7 +86,7 @@ class InputType(QWidget):
             "Plain": self.plain,
         }
         if has_none:
-            self.input_types["Same as Input"] = NoneType()
+            self.input_types["Same as Input"] = SameAsInput()
 
         radio_layout.addWidget(QLabel("WFS File Type:"))
         self.radio = QButtonGroup()

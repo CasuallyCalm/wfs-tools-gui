@@ -41,7 +41,10 @@ class WFSReencryptor(QWidget):
         if button.text() == "Plain":
             self.otp.hide()
             self.seeprom.hide()
-        elif self.otp.isHidden() or self.seeprom.isHidden():
+        elif button.text() == "MLC":
+            self.otp.show()
+            self.seeprom.hide()
+        elif button.text() == "USB":
             self.otp.show()
             self.seeprom.show()
 
@@ -49,7 +52,10 @@ class WFSReencryptor(QWidget):
         if button.text() == "Plain":
             self.output_otp.hide()
             self.output_seeprom.hide()
-        elif self.output_otp.isHidden() or self.output_seeprom.isHidden():
+        elif button.text() == "MLC":
+            self.output_otp.show()
+            self.output_seeprom.hide()
+        elif button.text() == "USB":
             self.output_otp.show()
             self.output_seeprom.show()
 
