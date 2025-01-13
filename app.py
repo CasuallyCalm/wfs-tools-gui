@@ -20,6 +20,13 @@ from widgets.wfs_file_injector import WFSFileInjector
 from widgets.wfs_info import WFSInfo
 from widgets.wfs_reencryptor import WFSReencryptor
 
+# Nuitka build settings
+# nuitka-project: --output-filename="WFS Tools GUI"
+# nuitka-project: --output-dir=dist
+# nuitka-project: --mode=app
+## nuitka-project: --windows-console-mode=disable
+# nuitka-project: --enable-plugin=pyside6
+
 
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
